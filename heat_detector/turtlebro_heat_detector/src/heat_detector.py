@@ -30,23 +30,24 @@ class HeatDetector(object):
         self._ignore_heat_after_continue = 10  # sec
         self._continue_command = 'resume'
         self._pause_command = 'pause'
-        self._cmd_topic = 'thermo_event'
+        self._control_topic = 'patrol_control'
         self._heat_pixels_topic = 'amg88xx_pixels'
-        
 
-        # init self as subscriber and publisher and start node
-        self._cmd_pub = rospy.Publisher(self._cmd_topic , String, queue_size=10)
-        self._heat_sub = rospy.Subscriber(self._heat_pixels_topic, Float32MultiArray, self._heat_callback)
-
+        # start it
         rospy.init_node('heat_detector')
         rospy.loginfo('HeatDetector: start heat detector node')
 
         # get roslaunch params and reinit part of params
         self._wait_after_detection = rospy.get_param('~_wait_after_detection', 10)
         self._ignore_heat_after_continue = rospy.get_param('~_ignore_heat_after_continue', 10)
-        self._threshold = rospy.get_param('~threshold', 50)
+        self._threshold = rospy.get_param('~threshold', 40)
+        self._control_topic = rospy.get_param('~control_topic', 'patrol_control')
 
         self._rate = rospy.Rate(10)
+
+        # init self as subscriber and publisher and start node
+        self._cmd_pub = rospy.Publisher(self._control_topic , String, queue_size=10)
+        self._heat_sub = rospy.Subscriber(self._heat_pixels_topic, Float32MultiArray, self._heat_callback)
 
         # start publishing loop
         self._run()
