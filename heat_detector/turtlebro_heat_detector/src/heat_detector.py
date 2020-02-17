@@ -22,7 +22,7 @@ class HeatDetector(object):
 
         # hardcoded constants
         self._current_pixel_array = None
-        self._threshold = 45
+        self._threshold = 50
         self._overheat_detected = False
         self._overheat_ignore = False
         self._overheat_start_time = 0
@@ -41,15 +41,20 @@ class HeatDetector(object):
         rospy.init_node('heat_detector')
         rospy.loginfo('HeatDetector: start heat detector node')
 
+        # get roslaunch params and reinit part of params
+        self._wait_after_detection = rospy.get_param('~_wait_after_detection', 10)
+        self._ignore_heat_after_continue = rospy.get_param('~_ignore_heat_after_continue', 10)
+        self._threshold = rospy.get_param('~threshold', 50)
+
         self._rate = rospy.Rate(10)
 
         # start publishing loop
         self._run()
-        pass
     
-    def _detector(self):
+    def _mean_detector(self):
         """
         very simple function, but we can use more complex detector in future
+        if mean bigger then threshold then panic
         """
 
         if np.mean(self._current_pixel_array)>= self._threshold:
@@ -57,10 +62,19 @@ class HeatDetector(object):
         else:
             return False
 
+    def _max_detector(self):
+        """
+        If one pixel from data array is bigger than threshold, then panic
+        """
+        if np.max(self._current_pixel_array)>= self._threshold:
+            return True
+        else:
+            return False
+
     def _pixels_identyfier(self):
         # check if we already detected heat and now in handling state
         if not (self._overheat_detected or self._overheat_ignore) :
-            if self._detector():
+            if self._max_detector():
                 # set detected flag and update timer
                 self._overheat_detected = True
                 self._overheat_start_time = rospy.Time.now().to_sec()
@@ -69,21 +83,23 @@ class HeatDetector(object):
                 self._cmd_pub.publish(self._pause_command)
                 rospy.loginfo('HeatDetector: pause command sent')
         else:
-            rospy.loginfo('HeatDetector: we handle heat detection')
+            if self._overheat_detected:
+                rospy.loginfo('HeatDetector: we have detected overheat and wait')
+            else:
+                if self._overheat_ignore:
+                    rospy.loginfo('HeatDetector: we have to ignore heat for some time')
 
-        pass
-    
     def _heat_callback(self, heat_msg):
         # just put msg data to self variable
         rospy.loginfo('HeatDetector: heat pixels message received')
         self._current_pixel_array = heat_msg.data
 
         if not (self._overheat_detected or self._overheat_ignore):
-            rospy.loginfo(heat_msg.data)
+            rospy.loginfo('HeatDetector: heat max value is {}'.format(np.max(self._current_pixel_array)))
+            #rospy.loginfo(heat_msg.data)
 
         # and check if there is overheat
         self._pixels_identyfier()
-        pass
 
     def _run(self):
         while not rospy.is_shutdown():
@@ -103,7 +119,7 @@ class HeatDetector(object):
                         self._overheat_ignore = False
                         self._overheat_start_time = 0  # TODO: do we need to do that
                         rospy.loginfo('HeatDetector: continue heat detecting')
-            rospy
+            #rospy
             self._rate.sleep()
 
 
