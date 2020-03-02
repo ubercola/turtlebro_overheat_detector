@@ -17,17 +17,29 @@ rosrun turtlebro_heat_detector heat_detector.py _threshold:=30
 
 Как запустить через roslaunch:  
 
+```
+roslaunch turtlebro_overheat_detector turtlebro_heat_detector.launch
+```
+
+Если нужно отслеживать вывод запущенной программы, то можно добавить опцию --screen  
+
+```
+roslaunch turtlebro_overheat_detector turtlebro_heat_detector.launch --screen
+```
+
 ----------------------------------------------------------------------------------------------------------------
 
-src/arduino/amg88xx_main.ino - скрипт для запуска amg8833 на arduino   
+src/arduino/amg88xx_main.ino - скрипт для получения данных с amg8833 на arduino   
 
-Как это сделать?  
+Что с ним делать?  
 
 Сначала - откройте в Arduino IDE amg88xx_main.ino  
-Нужно будет использовать библиотеку Adafruit_AMG88xx library [отсюда](https://github.com/adafruit/Adafruit_AMG88xx):  
+Нужно будет подключить библиотеку Adafruit_AMG88xx library [можно прямо из репозитория](https://github.com/adafruit/Adafruit_AMG88xx)  
+(Или просто найдите ее в arduino library manager).  
 
-Или просто найдите ее в arduino library manager.  
 Затем скомпилируйте скетч и загрузите в встроенную arduino mega  
+
+
 
 -----------------------------------------------------------------------------------------------------------------
 
