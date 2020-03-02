@@ -1,5 +1,5 @@
 <launch>
-    <node pkg="turtlebro_heat_detector" type="heat_detector.py" name="turtlebro_heat_detector" output="log" respawn="false"/>
+    <node pkg="turtlebro_overheat_detector" type="heat_detector.py" name="turtlebro_heat_detector" output="log" respawn="false"/>
 	<param name="_wait_after_detection" value="10"/>
 	<param name="_ignore_heat_after_continue" value="10"/>
 	<param name="_threshold" value="40"/>

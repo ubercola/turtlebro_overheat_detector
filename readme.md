@@ -1,4 +1,4 @@
-amg88xx_main.cpp - arduino amg8833 sensor script that sends 64 pixels each second  
+src/arduino/amg88xx_main.ino - arduino amg8833 sensor script that sends 64 pixels each second  
 
 at first - download amg88xx_main.cpp  
 open in Arduino IDE  
