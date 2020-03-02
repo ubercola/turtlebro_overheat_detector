@@ -1,38 +1,35 @@
-src/arduino/amg88xx_main.ino - arduino amg8833 sensor script that sends 64 pixels each second  
+Установка пакета  
 
-at first - download amg88xx_main.cpp  
-open in Arduino IDE  
-you have to use Adafruit_AMG88xx library from here:  
-
-https://github.com/adafruit/Adafruit_AMG88xx  
-
-or find it in arduino library manager.  
-
-then compile and download to onboard arduino mega  
-
-
------------------------------------------------------------------------------------------------------------------
-
-turtlebro_heat_detector - package for handling data from arduino heat node  
-
-load this package to   
+На RaspberryPi установить пакет "стандартным" способом  
 
 ```
-~/ros_catkin_ws/src
+cd ros_catkin_ws/src
+git clone https://github.com/voltbro/turtlebro_patrol
+cd ..
+sudo ./src/catkin/bin/catkin_make_isolated --install -DCMAKE_BUILD_TYPE=Release --install-space /opt/ros/melodic --pkg=turtlebro_overheat_detector
+
 ```
 
-compile as package in RPi:  
-
-```
-sudo ./src/catkin/bin/catkin_make_isolated --install -DCMAKE_BUILD_TYPE=Release --install-space /opt/ros/melodic --pkg=turtlebro_heat_detector
-```
-
-how to run:  
+Как запустить через rosrun :  
 ```
 rosrun turtlebro_heat_detector heat_detector.py _threshold:=30
 ```
 
----------------------------------------------------------------------------------------------------------------
+Как запустить через roslaunch:  
+
+----------------------------------------------------------------------------------------------------------------
+
+src/arduino/amg88xx_main.ino - скрипт для запуска amg8833 на arduino   
+
+Как это сделать?  
+
+Сначала - откройте в Arduino IDE amg88xx_main.ino  
+Нужно будет использовать библиотеку Adafruit_AMG88xx library [отсюда](https://github.com/adafruit/Adafruit_AMG88xx):  
+
+Или просто найдите ее в arduino library manager.  
+Затем скомпилируйте скетч и загрузите в встроенную arduino mega  
+
+-----------------------------------------------------------------------------------------------------------------
 
 voltbro 2020
 
