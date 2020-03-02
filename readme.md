@@ -4,7 +4,7 @@
 
 ```
 cd ros_catkin_ws/src
-git clone https://github.com/voltbro/turtlebro_patrol
+git clone https://github.com/voltbro/turtlebro_overheat_detector
 cd ..
 sudo ./src/catkin/bin/catkin_make_isolated --install -DCMAKE_BUILD_TYPE=Release --install-space /opt/ros/melodic --pkg=turtlebro_overheat_detector
 
