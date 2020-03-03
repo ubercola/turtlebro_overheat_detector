@@ -17,6 +17,9 @@ rosrun turtlebro_heat_detector heat_detector.py _threshold:=30
 
 Как запустить через roslaunch:  
 
+heat_patrol.launch - патрулирование и поиск перегрева
+heat_detector.launch - только поиск перегрева, без запуска патрулирования и навигации
+
 ```
 roslaunch turtlebro_overheat_detector turtlebro_heat_detector.launch
 ```
@@ -24,7 +27,7 @@ roslaunch turtlebro_overheat_detector turtlebro_heat_detector.launch
 Если нужно отслеживать вывод запущенной программы, то можно добавить опцию --screen  
 
 ```
-roslaunch turtlebro_overheat_detector turtlebro_heat_detector.launch --screen
+roslaunch turtlebro_overheat_detector heat_patrol.launch --screen
 ```
 
 ----------------------------------------------------------------------------------------------------------------
