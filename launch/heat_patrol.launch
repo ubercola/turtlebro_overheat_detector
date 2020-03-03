@@ -1,12 +1,9 @@
 <launch>
-	<!--Navigation -->
-  	<include file="$(find turtlebro_navigation)/launch/turtlebro_slam_navigation.launch">
-    <arg name="open_rviz" value="False" />
-  	</include>
 
-  	<!-- Run patrole node -->
-  	<include file="$(find turtlebro_patrol)/launch/patrol_run.launch"/>
+  	<!-- Run full patrole node -->
+  	<include file="$(find turtlebro_patrol)/launch/patrol.launch"/>
 
 	<!-- Run heat detection -->
 	<include file="$(find turtlebro_overheat_detector)/launch/heat_detector.launch"/>
+
 </launch>

@@ -1,12 +1,8 @@
 <launch>
-	<!--Navigation -->
-  	<include file="$(find turtlebro_navigation)/launch/turtlebro_slam_navigation.launch">
-    <arg name="open_rviz" value="False" />
-  	</include>
-
-  	<!-- Run patrole node -->
-  	<include file="$(find turtlebro_patrol)/launch/patrol_run.launch"/>
-
-	<!-- Run heat detection -->
-	<include file="$(find turtlebro_overheat_detector)/launch/heat_detector.launch"/>
+    <node pkg="turtlebro_overheat_detector" type="heat_detector.py" name="heat_detector" output="screen">
+        <param name="_wait_after_detection" value="10" />
+        <param name="_ignore_heat_after_continue" value="10"/>
+        <param name="threshold" value="40"/>
+        <param name="control_topic" value="patrol_control"/>
+    </node>
 </launch>
