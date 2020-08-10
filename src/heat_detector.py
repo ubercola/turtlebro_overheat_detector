@@ -143,6 +143,8 @@ class HeatDetector(object):
                         # set off all flags and start detecting
                         self._overheat_ignore = False
                         self._overheat_start_time = 0  # TODO: do we need to do that
+                        # turn off the LED by force if it accidentally remains in state on
+                        self._alarm_led_pub.publish(False)
                         rospy.loginfo('HeatDetector: continue heat detecting')
             #rospy
             self._rate.sleep()
