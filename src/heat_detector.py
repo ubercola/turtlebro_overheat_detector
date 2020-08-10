@@ -7,7 +7,7 @@ voltbro ROS course examples
 """
 
 import rospy
-from std_msgs.msg import Float32MultiArray, String
+from std_msgs.msg import Float32MultiArray, String, Bool
 import numpy as np
 
 
@@ -26,12 +26,16 @@ class HeatDetector(object):
         self._overheat_detected = False
         self._overheat_ignore = False
         self._overheat_start_time = 0
+        self._blink_start_time = 0
         self._wait_after_detection = 10  # sec
         self._ignore_heat_after_continue = 10  # sec
         self._continue_command = 'resume'
         self._pause_command = 'pause'
         self._control_topic = 'patrol_control'
         self._heat_pixels_topic = 'amg88xx_pixels'
+        self._alarm_led_topic = 'alarm_led'
+        self._alarm_blink_period = 0.5
+        self._current_led_state = False
 
         # start it
         rospy.init_node('heat_detector')
@@ -40,12 +44,15 @@ class HeatDetector(object):
         # get roslaunch params and reinit part of params
         self._wait_after_detection = rospy.get_param('~_wait_after_detection', 10)
         self._ignore_heat_after_continue = rospy.get_param('~_ignore_heat_after_continue', 10)
-        self._threshold = rospy.get_param('~threshold', 40)
+        self._threshold = rospy.get_param('~threshold', 45)
         self._control_topic = rospy.get_param('~control_topic', 'patrol_control')
+        self._alarm_led_topic = rospy.get_param('~alarm_led_topic ', 'alarm_led')
+        self._heat_pixels_topic = rospy.get_param('~heat_pixels_topic' ,'amg88xx_pixels')
 
         self._rate = rospy.Rate(10)
 
         # init self as subscriber and publisher and start node
+        self._alarm_led_pub = rospy.Publisher(self._alarm_led_topic , Bool, queue_size=10)
         self._cmd_pub = rospy.Publisher(self._control_topic , String, queue_size=10)
         self._heat_sub = rospy.Subscriber(self._heat_pixels_topic, Float32MultiArray, self._heat_callback)
 
@@ -82,6 +89,9 @@ class HeatDetector(object):
                 rospy.loginfo('HeatDetector: overheat detected')
                 # and publish pause command once
                 self._cmd_pub.publish(self._pause_command)
+                # and start alarm blink
+                self._blink_start_time = rospy.Time.now().to_sec()
+
                 rospy.loginfo('HeatDetector: pause command sent')
         else:
             if self._overheat_detected:
@@ -89,6 +99,17 @@ class HeatDetector(object):
             else:
                 if self._overheat_ignore:
                     rospy.loginfo('HeatDetector: we have to ignore heat for some time')
+
+    def _alarm_blink(self):
+        # blinks only when self._overheat_detected or self._overheat_ignore
+        if self._overheat_detected or self._overheat_ignore:
+            if rospy.Time.now().to_sec() - self._blink_start_time >= self._alarm_blink_period:
+                self._current_led_state = not self._current_led_state
+                # time to toggle alarm lamp on arduino
+                self._alarm_led_pub.publish(self._current_led_state)
+                # and update time
+                self._blink_start_time = rospy.Time.now().to_sec()
+        pass
 
     def _heat_callback(self, heat_msg):
         # just put msg data to self variable
@@ -104,6 +125,9 @@ class HeatDetector(object):
 
     def _run(self):
         while not rospy.is_shutdown():
+            # we call alarm blink check everytime
+            self._alarm_blink()
+
             if self._overheat_detected:
                 # wait for send continue
                 if rospy.Time.now().to_sec() - self._overheat_start_time >= self._wait_after_detection:
@@ -130,4 +154,4 @@ if __name__ == '__main__':
         hd = HeatDetector()
 
     except rospy.ROSInterruptException:
-        pass
+        print("bye")
