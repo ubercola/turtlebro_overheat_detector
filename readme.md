@@ -1,50 +1,34 @@
-Установка пакета  
 
-На RaspberryPi установить пакет "стандартным" способом  
+### Description:
+
+This package allows you to start a node for receiving data from the built-in AMG88xx GridEYE 8x8 IR camera thermal sensor and control the patrolling process from the https://github.com/voltbro/turtlebro_patrol package. When a heat source with a temperature higher than 45C is detected, the detection node stops patrolling, turns on the signal lamp and enters the standby state for 10 seconds. After that, the robot starts patrolling again, but for the first 10 seconds it ignores all sources of heat.
+
+
+### Dependecies:
+
+- turtlebro_patrol
+
+### Package installation
+
+Install the package on RaspberryPi in the "standard" way:
 
 ```
-cd ros_catkin_ws/src
+cd ~/ros_catkin_ws/src
 git clone https://github.com/ubercola/turtlebro_overheat_detector
-cd ..
+cd ~/ros_catkin_ws
 sudo ./src/catkin/bin/catkin_make_isolated --install -DCMAKE_BUILD_TYPE=Release --install-space /opt/ros/melodic --pkg=turtlebro_overheat_detector
-
 ```
 
-Как запустить через rosrun :  
-```
-rosrun turtlebro_heat_detector heat_detector.py _threshold:=30
-```
+### Launch
 
-Как запустить через roslaunch:  
 
-heat_patrol.launch - патрулирование и поиск перегрева
-heat_detector.launch - только поиск перегрева, без запуска патрулирования и навигации
-
+Launch only detector node, without patrol:
 ```
 roslaunch turtlebro_overheat_detector turtlebro_heat_detector.launch
 ```
 
-Если нужно отслеживать вывод запущенной программы, то можно добавить опцию --screen  
-
+Launch patrol and heat detector:
 ```
-roslaunch turtlebro_overheat_detector heat_patrol.launch --screen
+roslaunch turtlebro_overheat_detector heat_patrol.launch
 ```
-
-----------------------------------------------------------------------------------------------------------------
-
-src/arduino/amg88xx_main.ino - скрипт для получения данных с amg8833 на arduino   
-
-Что с ним делать?  
-
-Сначала - откройте в Arduino IDE amg88xx_main.ino  
-Нужно будет подключить библиотеку Adafruit_AMG88xx library [можно прямо из репозитория](https://github.com/adafruit/Adafruit_AMG88xx)  
-(Или просто найдите ее в arduino library manager).  
-
-Затем скомпилируйте скетч и загрузите в встроенную arduino mega.  
-Запускать еще раз rosserial не нужно, он запускается по умолчанию при запуске робота.  
-
------------------------------------------------------------------------------------------------------------------
-
-voltbro 2020
-
 
