@@ -29,7 +29,7 @@ class HeatDetector(object):
         self._blink_start_time = 0
         self._wait_after_detection = 10  # sec
         self._ignore_heat_after_continue = 10  # sec
-        self._continue_command = 'resume'
+        self._continue_command = 'next'
         self._pause_command = 'pause'
         self._control_topic = 'patrol_control'
         self._heat_pixels_topic = 'amg88xx_pixels'
@@ -55,6 +55,9 @@ class HeatDetector(object):
         self._alarm_led_pub = rospy.Publisher(self._alarm_led_topic , Bool, queue_size=10)
         self._cmd_pub = rospy.Publisher(self._control_topic , String, queue_size=10)
         self._heat_sub = rospy.Subscriber(self._heat_pixels_topic, Float32MultiArray, self._heat_callback)
+
+        # turn off the LED by force if it accidentally remains in state on
+        self._alarm_led_pub.publish(False)
 
         # start publishing loop
         self._run()

@@ -1,10 +1,10 @@
 
-### Description:
+### Description
 
 This package allows you to start a node for receiving data from the built-in AMG88xx GridEYE 8x8 IR camera thermal sensor and control the patrolling process from the https://github.com/voltbro/turtlebro_patrol package. When a heat source with a temperature higher than 45C is detected, the detection node stops patrolling, turns on the signal lamp and enters the standby state for 10 seconds. After that, the robot starts patrolling again, but for the first 10 seconds it ignores all sources of heat.
 
 
-### Dependecies:
+### Dependecies
 
 - turtlebro_patrol
 
