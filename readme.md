@@ -40,7 +40,7 @@ https://learn.adafruit.com/adafruit-amg8833-8x8-thermal-camera-sensor/arduino-wi
 
 Launch only detector node, without patrol:
 ```
-roslaunch turtlebro_overheat_detector turtlebro_heat_detector.launch
+roslaunch turtlebro_overheat_detector heat_detector.launch
 ```
 
 Launch patrol and heat detector:
