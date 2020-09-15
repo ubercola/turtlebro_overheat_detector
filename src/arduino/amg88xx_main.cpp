@@ -24,7 +24,7 @@
 #include <std_msgs/Bool.h>
 
 // prepare signal led output
-// led connected to pin D30
+// led connected to pin A12
 #define ledPin A12
 
 // timing for read AMG88xx data

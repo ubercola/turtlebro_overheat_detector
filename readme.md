@@ -21,7 +21,7 @@ sudo ./src/catkin/bin/catkin_make_isolated --install -DCMAKE_BUILD_TYPE=Release 
 
 ### Connecting thermal sensor
 
-AMG88xx thermal sensor   must be connected to built-in arduino compatible controller via I2C protocol. Wires from AMG88XX pins must be connected to one of the white connectors A8-A11 or A12-A15 on the Turtlebro Board.
+AMG88xx thermal sensor   must be connected to built-in arduino compatible controller via I2C protocol. Wires from AMG88XX pins must be connected to one of the white connectors A8-A11 or A13-A15 on the Turtlebro Board.
 
 sensor documentation:  
 https://cdn.sparkfun.com/assets/4/1/c/0/1/Grid-EYE_Datasheet.pdf  
@@ -38,6 +38,14 @@ SCL -> SCL
 Example about connecting AMG88xx to Arduino:  
 https://learn.adafruit.com/adafruit-amg8833-8x8-thermal-camera-sensor/arduino-wiring-test  
 
+
+### Connecting led lamp
+
+Led lamp '+' pin must be connected STRICTLY to pin marked 'GPIO' in  white connector marked as 'A12'.   
+Led lamp '-' pin must be connected to 'GND' pin on the same connector marked as 'A12'.  
+
+NOTE:  
+If you are using an unbranded LED lamp module, connect a current limiting resistor to the LED.  
 
 ### How to install on Arduino
 
