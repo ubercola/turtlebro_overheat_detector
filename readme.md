@@ -54,8 +54,7 @@ Open the Arduino Library Manager, find AMGXX library in search string, and insta
 
 Open file src/arduino/amg88xx_main.ino from cloned repo in Arduino IDE. Connect built-in turtlebro`s Arduino Mega via USB, and upload script to it.
 
-Reboot RPi, you must see  topic "amg88xx_pixels" in list of ros topics. Node sends array of 64 floats those it got from sensor.
-
+Reboot RPi, you must see topics "amg88xx_pixels" and "/alarm_led" in list of ros topics.
 
 ### Launch
 
@@ -71,5 +70,28 @@ roslaunch turtlebro_overheat_detector heat_patrol.launch
 
 Heat detector node ('heat_detector') will read topic "amg88xx_pixels" (it publish array of 64 floats, those it got from sensor) and check maximum value of temperature from that array. If maximum value is bigger than threshold (threshold can be set from .launch file), node sends command 'pause' to topic '/patrol_control' and send message to topic '/alarm_led'(it turns on the signal lamp). For 10 seconds patrol node enters the standby state. After that, the robot starts patrolling again, but for the first 10 seconds it ignores all sources of heat.
 
+You can manually pub message to "/alarm_led" topic to set lamp on and off.  
+To turn lamp on.  
+```
+rostopic pub /alarm_led std_msgs/Bool "data: true"   
+```
+To turn lamp off.  
+```
+rostopic pub /alarm_led std_msgs/Bool "data: false"   
+```
 
+You can manually read messages to "/amg88xx_pixels" topic to see array of temperature data directly from sensor  
+```
+rostopic echo /amg88xx_pixels  
 
+```
+You must see something like that:
+```
+---
+layout: 
+  dim: []
+  data_offset: 0
+data: [18.5, 18.0, 18.5, 18.5, 18.5, 18.75, 18.75, 18.0, 18.75, 18.25, 18.5, 18.0, 18.5, 18.0, 18.5, 18.25, 18.75, 19.0, 18.5, 19.0, 18.75, 18.5, 18.75, 19.0, 19.0, 18.25, 18.75, 18.75, 18.75, 18.75, 18.5, 18.75, 18.75, 18.25, 19.0, 18.75, 18.75, 19.0, 19.0, 18.5, 18.0, 17.75, 18.75, 18.75, 18.25, 18.0, 18.5, 18.75, 18.0, 17.25, 18.0, 18.0, 18.25, 18.5, 18.75, 19.0, 18.25, 19.25, 19.0, 19.0, 18.25, 19.25, 19.5, 19.0]
+---
+
+```
