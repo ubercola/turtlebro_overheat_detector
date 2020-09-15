@@ -1,12 +1,12 @@
 
 ### Description
 
-This package allows you to start a node for receiving data from the AMG88xx GridEYE 8x8 IR camera thermal sensor and control the patrolling process from the https://github.com/voltbro/turtlebro_patrol package.  When a heat source with a temperature higher than 45C is detected, the detection node stops patrolling, turns on the signal lamp and enters the standby state for 10 seconds. After that, the robot starts patrolling again, but for the first 10 seconds it ignores all sources of heat.
+This package allows you to start a node for receiving data from the AMG88xx GridEYE 8x8 IR camera thermal sensor and control the patrolling process from the https://github.com/voltbro/turtlebro_patrol package.  When a heat source with a temperature higher than threshold is detected, the detection node stops patrolling, turns on the signal lamp and enters the standby state for 10 seconds. After that, the robot starts patrolling again, but for the first 10 seconds it ignores all sources of heat.
 
 
 ### Dependecies
 
-- turtlebro_patrol
+- turtlebro_patrol  
 
 ### Package installation on RPI
 
@@ -39,10 +39,17 @@ Example about connecting AMG88xx to Arduino:
 https://learn.adafruit.com/adafruit-amg8833-8x8-thermal-camera-sensor/arduino-wiring-test  
 
 
+### How to install on Arduino
+
+Install Arduino Ide https://www.arduino.cc/en/main/software  
+Open the Arduino Library Manager, find AMGXX library in search string, and install it. You also can download it directly from https://github.com/adafruit/Adafruit_AMG88xx  
+
+Open file src/arduino/amg88xx_main.ino from cloned repo in Arduino IDE. Connect built-in turtlebro`s Arduino Mega via USB, and upload script to it.
+
+Reboot RPi, you must see  topic "amg88xx_pixels" in list of ros topics. Node sends array of 64 floats those it got from sensor.
 
 
 ### Launch
-
 
 Launch only detector node, without patrol:
 ```
@@ -54,12 +61,7 @@ Launch patrol and heat detector:
 roslaunch turtlebro_overheat_detector heat_patrol.launch
 ```
 
-### How to install on Arduino
+Heat detector node ('heat_detector') will read topic "amg88xx_pixels" (it publish array of 64 floats, those it got from sensor) and check maximum value of temperature from that array. If maximum value is bigger than threshold (threshold can be set from .launch file), node sends command 'pause' to topic '/patrol_control' and send message to topic '/alarm_led'(it turns on the signal lamp). For 10 seconds patrol node enters the standby state. After that, the robot starts patrolling again, but for the first 10 seconds it ignores all sources of heat.
 
-Install Arduino Ide https://www.arduino.cc/en/main/software  
-Open the Arduino Library Manager, find AMGXX library in search string, and install it. You also can download it directly from https://github.com/adafruit/Adafruit_AMG88xx  
 
-Open file src/arduino/amg88xx_main.ino from cloned repo in Arduino IDE. Connect built-in turtlebro`s Arduino Mega via USB, and upload script to it.
-
-Reboot RPi, you must see  topic "amg88xx_pixels" in list of ros topics. Node sends array of 64 floats those it got from sensor.
 

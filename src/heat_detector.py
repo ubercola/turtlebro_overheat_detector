@@ -42,8 +42,8 @@ class HeatDetector(object):
         rospy.loginfo('HeatDetector: start heat detector node')
 
         # get roslaunch params and reinit part of params
-        self._wait_after_detection = rospy.get_param('~_wait_after_detection', 10)
-        self._ignore_heat_after_continue = rospy.get_param('~_ignore_heat_after_continue', 10)
+        self._wait_after_detection = rospy.get_param('~wait_after_detection', 10)
+        self._ignore_heat_after_continue = rospy.get_param('~ignore_heat_after_continue', 10)
         self._threshold = rospy.get_param('~threshold', 45)
         self._control_topic = rospy.get_param('~control_topic', 'patrol_control')
         self._alarm_led_topic = rospy.get_param('~alarm_led_topic ', 'alarm_led')
