@@ -82,6 +82,13 @@ class HeatDetector(object):
         else:
             return False
 
+    def bye(self):
+
+        # and publish pause command once
+        self._cmd_pub.publish(self._pause_command)
+        # turn off the LED by force if it accidentally remains in state on
+        self._alarm_led_pub.publish(False)
+
     def _pixels_identyfier(self):
         # check if we already detected heat and now in handling state
         if not (self._overheat_detected or self._overheat_ignore) :
@@ -159,4 +166,5 @@ if __name__ == '__main__':
         hd = HeatDetector()
 
     except rospy.ROSInterruptException:
+        hd.bye()
         print("bye")
