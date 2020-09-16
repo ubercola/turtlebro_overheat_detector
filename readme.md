@@ -50,11 +50,14 @@ If you are using an unbranded LED lamp module, connect a current limiting resist
 ### How to install on Arduino
 
 Install Arduino Ide https://www.arduino.cc/en/main/software  
-Open the Arduino Library Manager, find AMGXX library in search string, and install it. You also can download it directly from https://github.com/adafruit/Adafruit_AMG88xx  
+ - Open the Arduino Library Manager, find AMGXX library in search string, and install it. You also can download it directly from https://github.com/adafruit/Adafruit_AMG88xx  
 
-Open file src/arduino/amg88xx_main.ino from cloned repo in Arduino IDE. Connect built-in turtlebro`s Arduino Mega via USB, and upload script to it.
+ - Add folder src/arduino/ros_lib manually to your Arduino Libraries.
 
-Reboot RPi, you must see topics "amg88xx_pixels" and "/alarm_led" in list of ros topics.
+ - Open file src/arduino/amg88xx_main/amg88xx_main.ino from cloned repo in Arduino IDE. 
+Connect built-in turtlebro`s Arduino Mega via USB, and upload script to it.
+
+After uploading you must see topics "amg88xx_pixels" and "/alarm_led" in list of ros topics.
 
 ### Launch
 
